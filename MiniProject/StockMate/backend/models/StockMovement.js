@@ -1,0 +1,3 @@
+import mongoose from 'mongoose';
+const schema = new mongoose.Schema({product:{type:mongoose.Schema.Types.ObjectId,ref:'Product',default:null},productId:{type:String,required:true},productName:{type:String,required:true},type:{type:String,enum:['IN','OUT'],required:true},quantity:{type:Number,required:true,min:1,validate:Number.isInteger},reason:{type:String,required:true,trim:true},notes:{type:String,default:''},previousQuantity:{type:Number,required:true,min:0},newQuantity:{type:Number,required:true,min:0}},{timestamps:true});
+schema.index({createdAt:-1}); export default mongoose.model('StockMovement',schema);

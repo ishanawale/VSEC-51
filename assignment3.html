@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Student Result Record Management System
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f4f6f8;
+            padding: 20px;
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+
+        h2 {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            font-size: 15px;
+
+        }
+
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #007bff;
+
+        }
+
+
+        button {
+
+            padding: 10px 16px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================
+           ADD BUTTON
+        ========================= */
+
+        .add-btn {
+
+            background: #007bff;
+
+            color: white;
+
+        }
+
+
+        .add-btn:hover {
+
+            background: #0056b3;
+
+        }
+
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-box {
+
+            margin: 25px 0 15px;
+
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 15px;
+
+            min-width: 850px;
+
+        }
+
+
+        th,
+        td {
+
+            border: 1px solid #ddd;
+
+            padding: 10px;
+
+            text-align: center;
+
+        }
+
+
+        th {
+
+            background: #007bff;
+
+            color: white;
+
+        }
+
+
+        tr:nth-child(even) {
+
+            background: #f8f9fa;
+
+        }
+
+
+        /* =========================
+           PASS / FAIL
+        ========================= */
+
+        .pass {
+
+            color: green;
+
+            font-weight: bold;
+
+        }
+
+
+        .fail {
+
+            color: red;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
+
+        .view-btn {
+
+            background: #28a745;
+
+            color: white;
+
+        }
+
+
+        .view-btn:hover {
+
+            background: #1e7e34;
+
+        }
+
+
+        /* =========================
+           DELETE BUTTON
+        ========================= */
+
+        .delete-btn {
+
+            background: #dc3545;
+
+            color: white;
+
+        }
+
+
+        .delete-btn:hover {
+
+            background: #a71d2a;
+
+        }
+
+
+        /* =========================
+           TOPPER
+        ========================= */
+
+        .topper-section {
+
+            margin: 25px 0;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7cc,
+                    #fff
+                );
+
+            border: 2px solid #f0c419;
+
+            text-align: center;
+
+        }
+
+
+        .trophy {
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .topper-section h2 {
+
+            color: #b8860b;
+
+        }
+
+
+        .topper-card {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0,0,0,0.08);
+
+        }
+
+
+        .topper-item span {
+
+            display: block;
+
+            color: #777;
+
+            font-size: 13px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .topper-item strong {
+
+            font-size: 18px;
+
+            color: #333;
+
+        }
+
+
+        .no-topper {
+
+            color: #777;
+
+            padding: 10px;
+
+        }
+
+
+        /* =========================
+           MODAL BACKGROUND
+        ========================= */
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            z-index: 1000;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background:
+                rgba(0,0,0,0.6);
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+        }
+
+
+        /* =========================
+           MODAL BOX
+        ========================= */
+
+        .modal-content {
+
+            background: white;
+
+            width: 100%;
+
+            max-width: 650px;
+
+            border-radius: 10px;
+
+            padding: 25px;
+
+            position: relative;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,0.3);
+
+            animation:
+                popup 0.2s ease;
+
+        }
+
+
+        @keyframes popup {
+
+            from {
+
+                transform: scale(0.8);
+
+                opacity: 0;
+
+            }
+
+            to {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        /* =========================
+           CLOSE BUTTON
+        ========================= */
+
+        .close-btn {
+
+            position: absolute;
+
+            right: 15px;
+
+            top: 10px;
+
+            font-size: 28px;
+
+            cursor: pointer;
+
+            color: #777;
+
+        }
+
+
+        .close-btn:hover {
+
+            color: red;
+
+        }
+
+
+        .modal-title {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+            color: #333;
+
+        }
+
+
+        /* =========================
+           STUDENT INFO
+        ========================= */
+
+        .student-info {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .info-box {
+
+            background: #f5f5f5;
+
+            padding: 12px;
+
+            border-radius: 5px;
+
+        }
+
+
+        .info-box span {
+
+            display: block;
+
+            color: #777;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .info-box strong {
+
+            font-size: 16px;
+
+        }
+
+
+        /* =========================
+           SUBJECT TABLE
+        ========================= */
+
+        .subject-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 15px;
+
+        }
+
+
+        .subject-table th {
+
+            background: #343a40;
+
+            color: white;
+
+        }
+
+
+        .subject-table td {
+
+            padding: 12px;
+
+        }
+
+
+        .subject-pass {
+
+            color: green;
+
+            font-weight: bold;
+
+            background: #e9f7ef;
+
+        }
+
+
+        .subject-fail {
+
+            color: red;
+
+            font-weight: bold;
+
+            background: #fdecec;
+
+        }
+
+
+        /* =========================
+           RESULT BOX
+        ========================= */
+
+        .final-result {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border-radius: 7px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        .final-pass {
+
+            background: #d4edda;
+
+            color: #155724;
+
+        }
+
+
+        .final-fail {
+
+            background: #f8d7da;
+
+            color: #721c24;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .form-group {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .topper-card {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+
+            .student-info {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .modal-content {
+
+                padding: 18px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =================================
+         TITLE
+    ================================== -->
+
+    <h1>
+
+        Student Result Record Management System
+
+    </h1>
+
+
+    <!-- =================================
+         ADD STUDENT
+    ================================== -->
+
+    <h2>
+
+        Add Student Result
+
+    </h2>
+
+
+    <div class="form-group">
+
+
+        <input
+            type="text"
+            id="rollNo"
+            placeholder="Enter Roll Number"
+        >
+
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Enter Student Name"
+        >
+
+
+        <input
+            type="number"
+            id="maths"
+            placeholder="Mathematics Marks (0-100)"
+            min="0"
+            max="100"
+            step="1"
+        >
+
+
+        <input
+            type="number"
+            id="science"
+            placeholder="Science Marks (0-100)"
+            min="0"
+            max="100"
+            step="1"
+        >
+
+
+        <input
+            type="number"
+            id="english"
+            placeholder="English Marks (0-100)"
+            min="0"
+            max="100"
+            step="1"
+        >
+
+
+        <input
+            type="number"
+            id="computer"
+            placeholder="Computer Marks (0-100)"
+            min="0"
+            max="100"
+            step="1"
+        >
+
+
+        <input
+            type="number"
+            id="social"
+            placeholder="Social Science Marks (0-100)"
+            min="0"
+            max="100"
+            step="1"
+        >
+
+    </div>
+
+
+    <button
+        class="add-btn"
+        onclick="addStudent()"
+    >
+
+        Add Student
+
+    </button>
+
+
+    <!-- =================================
+         TOPPER
+    ================================== -->
+
+    <div class="topper-section">
+
+
+        <div class="trophy">
+
+            🏆
+
+        </div>
+
+
+        <h2>
+
+            Topper of the Class
+
+        </h2>
+
+
+        <div id="topper">
+
+            <p class="no-topper">
+
+                No student records available.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================
+         SEARCH
+    ================================== -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search by Roll Number or Student Name..."
+            onkeyup="displayStudents()"
+        >
+
+    </div>
+
+
+    <!-- =================================
+         STUDENT RECORDS
+    ================================== -->
+
+    <h2>
+
+        Student Result Records
+
+    </h2>
+
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Roll No
+                    </th>
+
+                    <th>
+                        Student Name
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Percentage
+                    </th>
+
+                    <th>
+                        Grade
+                    </th>
+
+                    <th>
+                        Result
+                    </th>
+
+                    <th>
+                        View Result
+                    </th>
+
+                    <th>
+                        Delete
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="studentTable">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================
+     RESULT MODAL
+====================================== -->
+
+<div
+    id="resultModal"
+    class="modal"
+    onclick="closeModalOutside(event)"
+>
+
+
+    <div
+        class="modal-content"
+        onclick="event.stopPropagation()"
+    >
+
+
+        <!-- CLOSE -->
+
+        <span
+            class="close-btn"
+            onclick="closeResult()"
+        >
+
+            &times;
+
+        </span>
+
+
+        <!-- TITLE -->
+
+        <h2
+            class="modal-title"
+            id="modalTitle"
+        >
+
+            Student Result
+
+        </h2>
+
+
+        <!-- STUDENT INFO -->
+
+        <div
+            class="student-info"
+            id="studentInfo"
+        >
+
+        </div>
+
+
+        <!-- SUBJECT TABLE -->
+
+        <table
+            class="subject-table"
+        >
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Subject
+                    </th>
+
+                    <th>
+                        Marks
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="subjectDetails"
+            >
+
+            </tbody>
+
+
+        </table>
+
+
+        <!-- FINAL RESULT -->
+
+        <div
+            id="finalResult"
+            class="final-result"
+        >
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================
+   LOAD STUDENTS
+========================================= */
+
+let students =
+    JSON.parse(
+        localStorage.getItem("students")
+    ) || [];
+
+
+/* =========================================
+   GET MARK
+========================================= */
+
+function getMark(id) {
+
+
+    const input =
+        document.getElementById(id);
+
+
+    const value =
+        input.value.trim();
+
+
+    if (value === "") {
+
+        return {
+            valid: false,
+            value: null
+        };
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if (
+        Number.isNaN(number)
+    ) {
+
+        return {
+            valid: false,
+            value: null
+        };
+
+    }
+
+
+    if (
+        !Number.isInteger(number)
+    ) {
+
+        return {
+            valid: false,
+            value: null
+        };
+
+    }
+
+
+    if (
+        number < 0 ||
+        number > 100
+    ) {
+
+        return {
+            valid: false,
+            value: null
+        };
+
+    }
+
+
+    return {
+
+        valid: true,
+
+        value: number
+
+    };
+
+}
+
+
+/* =========================================
+   ADD STUDENT
+========================================= */
+
+function addStudent() {
+
+
+    const rollNo =
+        document
+            .getElementById("rollNo")
+            .value
+            .trim();
+
+
+    const studentName =
+        document
+            .getElementById("studentName")
+            .value
+            .trim();
+
+
+    /* ROLL NUMBER */
+
+    if (rollNo === "") {
+
+        alert(
+            "Please enter a roll number."
+        );
+
+        return;
+
+    }
+
+
+    /* STUDENT NAME */
+
+    if (studentName === "") {
+
+        alert(
+            "Please enter student name."
+        );
+
+        return;
+
+    }
+
+
+    /* NAME VALIDATION */
+
+    if (
+        !/^[a-zA-Z\s.'-]+$/
+            .test(studentName)
+    ) {
+
+        alert(
+            "Please enter a valid student name."
+        );
+
+        return;
+
+    }
+
+
+    /* DUPLICATE ROLL */
+
+    const duplicate =
+        students.some(
+
+            student =>
+
+                String(student.rollNo)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                rollNo
+                    .trim()
+                    .toLowerCase()
+
+        );
+
+
+    if (duplicate) {
+
+        alert(
+            "This roll number already exists."
+        );
+
+        return;
+
+    }
+
+
+    /* MARKS */
+
+    const maths =
+        getMark("maths");
+
+
+    const science =
+        getMark("science");
+
+
+    const english =
+        getMark("english");
+
+
+    const computer =
+        getMark("computer");
+
+
+    const social =
+        getMark("social");
+
+
+    const subjects = [
+
+        {
+            name: "Mathematics",
+            data: maths,
+            id: "maths"
+        },
+
+        {
+            name: "Science",
+            data: science,
+            id: "science"
+        },
+
+        {
+            name: "English",
+            data: english,
+            id: "english"
+        },
+
+        {
+            name: "Computer",
+            data: computer,
+            id: "computer"
+        },
+
+        {
+            name: "Social Science",
+            data: social,
+            id: "social"
+        }
+
+    ];
+
+
+    /* VALIDATE MARKS */
+
+    for (
+        const subject of subjects
+    ) {
+
+
+        if (
+            !subject.data.valid
+        ) {
+
+            alert(
+
+                `Please enter valid marks for ${subject.name}. Marks must be between 0 and 100.`
+
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    /* MARK VALUES */
+
+    const marks = [
+
+        maths.value,
+
+        science.value,
+
+        english.value,
+
+        computer.value,
+
+        social.value
+
+    ];
+
+
+    /* TOTAL */
+
+    const total =
+        marks.reduce(
+            (sum, mark) =>
+                sum + mark,
+            0
+        );
+
+
+    /* PERCENTAGE */
+
+    const percentage =
+        (total / 500) * 100;
+
+
+    /* GRADE */
+
+    let grade;
+
+
+    if (percentage >= 90) {
+
+        grade = "A+";
+
+    }
+
+    else if (percentage >= 80) {
+
+        grade = "A";
+
+    }
+
+    else if (percentage >= 70) {
+
+        grade = "B";
+
+    }
+
+    else if (percentage >= 60) {
+
+        grade = "C";
+
+    }
+
+    else if (percentage >= 50) {
+
+        grade = "D";
+
+    }
+
+    else {
+
+        grade = "F";
+
+    }
+
+
+    /* PASS / FAIL */
+
+    const passed =
+        marks.every(
+            mark => mark >= 35
+        );
+
+
+    const result =
+        passed
+            ? "PASS"
+            : "FAIL";
+
+
+    /* STUDENT OBJECT */
+
+    const student = {
+
+        rollNo: rollNo,
+
+        name: studentName,
+
+        maths: maths.value,
+
+        science: science.value,
+
+        english: english.value,
+
+        computer: computer.value,
+
+        social: social.value,
+
+        total: total,
+
+        percentage:
+            percentage.toFixed(2),
+
+        grade: grade,
+
+        result: result
+
+    };
+
+
+    /* SAVE */
+
+    students.push(student);
+
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+
+    /* CLEAR */
+
+    clearForm();
+
+
+    /* UPDATE */
+
+    displayStudents();
+
+    displayTopper();
+
+
+    alert(
+        "Student added successfully!"
+    );
+
+}
+
+
+/* =========================================
+   DISPLAY STUDENTS
+========================================= */
+
+function displayStudents() {
+
+
+    const table =
+        document.getElementById(
+            "studentTable"
+        );
+
+
+    const search =
+        document
+            .getElementById("search")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    table.innerHTML = "";
+
+
+    const filteredStudents =
+        students.filter(
+
+            student =>
+
+                String(student.rollNo)
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(student.name)
+                    .toLowerCase()
+                    .includes(search)
+
+        );
+
+
+    if (
+        filteredStudents.length === 0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="padding:20px;color:#777;"
+                >
+
+                    No student records found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filteredStudents.forEach(
+
+        student => {
+
+
+            const index =
+                students.indexOf(student);
+
+
+            const resultClass =
+                student.result === "PASS"
+                    ? "pass"
+                    : "fail";
+
+
+            table.innerHTML += `
+
+                <tr>
+
+
+                    <td>
+
+                        ${student.rollNo}
+
+                    </td>
+
+
+                    <td>
+
+                        ${student.name}
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            ${student.total}/500
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        ${student.percentage}%
+
+                    </td>
+
+
+                    <td>
+
+                        ${student.grade}
+
+                    </td>
+
+
+                    <td
+                        class="${resultClass}"
+                    >
+
+                        ${student.result}
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+
+                            class="view-btn"
+
+                            onclick="viewResult(${index})"
+
+                        >
+
+                            👁 View Result
+
+                        </button>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+
+                            class="delete-btn"
+
+                            onclick="deleteStudent(${index})"
+
+                        >
+
+                            Delete
+
+                        </button>
+
+                    </td>
+
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+}
+
+
+/* =========================================
+   VIEW INDIVIDUAL RESULT
+========================================= */
+
+function viewResult(index) {
+
+
+    const student =
+        students[index];
+
+
+    if (!student) {
+
+        return;
+
+    }
+
+
+    /* MODAL TITLE */
+
+    document
+        .getElementById("modalTitle")
+        .innerText =
+        student.name +
+        " - Result";
+
+
+    /* STUDENT INFORMATION */
+
+    document
+        .getElementById("studentInfo")
+        .innerHTML = `
+
+            <div class="info-box">
+
+                <span>
+                    Roll Number
+                </span>
+
+                <strong>
+                    ${student.rollNo}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Student Name
+                </span>
+
+                <strong>
+                    ${student.name}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Total Marks
+                </span>
+
+                <strong>
+                    ${student.total}/500
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Percentage
+                </span>
+
+                <strong>
+                    ${student.percentage}%
+                </strong>
+
+            </div>
+
+        `;
+
+
+    /* SUBJECT DETAILS */
+
+    const subjects = [
+
+        {
+            name: "Mathematics",
+            marks: student.maths
+        },
+
+        {
+            name: "Science",
+            marks: student.science
+        },
+
+        {
+            name: "English",
+            marks: student.english
+        },
+
+        {
+            name: "Computer",
+            marks: student.computer
+        },
+
+        {
+            name: "Social Science",
+            marks: student.social
+        }
+
+    ];
+
+
+    let subjectHTML = "";
+
+
+    subjects.forEach(
+
+        subject => {
+
+
+            const passed =
+                Number(subject.marks)
+                >=
+                35;
+
+
+            const className =
+                passed
+                    ? "subject-pass"
+                    : "subject-fail";
+
+
+            const status =
+                passed
+                    ? "PASS"
+                    : "FAIL";
+
+
+            subjectHTML += `
+
+                <tr>
+
+                    <td>
+
+                        ${subject.name}
+
+                    </td>
+
+                    <td
+                        class="${className}"
+                    >
+
+                        ${subject.marks}/100
+
+                    </td>
+
+                    <td
+                        class="${className}"
+                    >
+
+                        ${status}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+
+    document
+        .getElementById("subjectDetails")
+        .innerHTML =
+        subjectHTML;
+
+
+    /* FINAL RESULT */
+
+    const finalResult =
+        document.getElementById(
+            "finalResult"
+        );
+
+
+    if (
+        student.result === "PASS"
+    ) {
+
+        finalResult.className =
+            "final-result final-pass";
+
+
+        finalResult.innerHTML = `
+
+            ✅ PASS
+
+            <br>
+
+            Grade: ${student.grade}
+
+        `;
+
+    }
+
+    else {
+
+        finalResult.className =
+            "final-result final-fail";
+
+
+        finalResult.innerHTML = `
+
+            ❌ FAIL
+
+            <br>
+
+            Grade: ${student.grade}
+
+            <br>
+
+            <small>
+                One or more subjects have marks below 35.
+            </small>
+
+        `;
+
+    }
+
+
+    /* SHOW MODAL */
+
+    document
+        .getElementById("resultModal")
+        .style.display =
+        "flex";
+
+}
+
+
+/* =========================================
+   CLOSE RESULT
+========================================= */
+
+function closeResult() {
+
+    document
+        .getElementById("resultModal")
+        .style.display =
+        "none";
+
+}
+
+
+/* =========================================
+   CLOSE WHEN CLICK OUTSIDE
+========================================= */
+
+function closeModalOutside(event) {
+
+
+    if (
+        event.target.id ===
+        "resultModal"
+    ) {
+
+        closeResult();
+
+    }
+
+}
+
+
+/* =========================================
+   DELETE STUDENT
+========================================= */
+
+function deleteStudent(index) {
+
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this student?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    students.splice(
+        index,
+        1
+    );
+
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+
+    displayStudents();
+
+    displayTopper();
+
+}
+
+
+/* =========================================
+   CLEAR FORM
+========================================= */
+
+function clearForm() {
+
+
+    document.getElementById(
+        "rollNo"
+    ).value = "";
+
+
+    document.getElementById(
+        "studentName"
+    ).value = "";
+
+
+    document.getElementById(
+        "maths"
+    ).value = "";
+
+
+    document.getElementById(
+        "science"
+    ).value = "";
+
+
+    document.getElementById(
+        "english"
+    ).value = "";
+
+
+    document.getElementById(
+        "computer"
+    ).value = "";
+
+
+    document.getElementById(
+        "social"
+    ).value = "";
+
+}
+
+
+/* =========================================
+   TOPPER
+========================================= */
+
+function displayTopper() {
+
+
+    const topperDiv =
+        document.getElementById(
+            "topper"
+        );
+
+
+    if (
+        students.length === 0
+    ) {
+
+        topperDiv.innerHTML = `
+
+            <p class="no-topper">
+
+                No student records available.
+
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* ONLY PASSING STUDENTS */
+
+    const passedStudents =
+        students.filter(
+
+            student =>
+                student.result === "PASS"
+
+        );
+
+
+    if (
+        passedStudents.length === 0
+    ) {
+
+        topperDiv.innerHTML = `
+
+            <p class="no-topper">
+
+                No topper available.
+                No student has passed all subjects.
+
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* FIND HIGHEST TOTAL */
+
+    const topper =
+        passedStudents.reduce(
+
+            (highest, student) =>
+
+                Number(student.total)
+                >
+                Number(highest.total)
+
+                    ? student
+
+                    : highest
+
+        );
+
+
+    /* DISPLAY TOPPER */
+
+    topperDiv.innerHTML = `
+
+        <div class="topper-card">
+
+
+            <div class="topper-item">
+
+                <span>
+                    🏆 Topper
+                </span>
+
+                <strong>
+                    ${topper.name}
+                </strong>
+
+            </div>
+
+
+            <div class="topper-item">
+
+                <span>
+                    Roll Number
+                </span>
+
+                <strong>
+                    ${topper.rollNo}
+                </strong>
+
+            </div>
+
+
+            <div class="topper-item">
+
+                <span>
+                    Total Marks
+                </span>
+
+                <strong>
+                    ${topper.total}/500
+                </strong>
+
+            </div>
+
+
+            <div class="topper-item">
+
+                <span>
+                    Percentage
+                </span>
+
+                <strong>
+                    ${topper.percentage}%
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+displayStudents();
+
+displayTopper();
+
+</script>
+
+
+</body>
+
+</html>

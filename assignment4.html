@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .success {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Employee Management System</h1>
+
+    <form id="employeeForm">
+
+        <div class="form-group">
+            <label for="employeeId">Employee ID</label>
+            <input type="text" id="employeeId" placeholder="Enter employee ID" required>
+        </div>
+
+        <div class="form-group">
+            <label for="employeeName">Employee Name</label>
+            <input type="text" id="employeeName" placeholder="Enter employee name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter email address" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter phone number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" required>
+                <option value="">Select Department</option>
+                <option value="HR">HR</option>
+                <option value="IT">IT</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Operations">Operations</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="designation">Designation</label>
+            <input type="text" id="designation" placeholder="Enter designation" required>
+        </div>
+
+        <div class="form-group">
+            <label for="joiningDate">Joining Date</label>
+            <input type="date" id="joiningDate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="number" id="salary" placeholder="Enter salary" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" placeholder="Enter address"></textarea>
+        </div>
+
+        <button type="submit">Submit Employee</button>
+
+    </form>
+
+    <!-- Only success message is displayed -->
+    <div class="success" id="successMessage">
+        Employee information submitted successfully!
+    </div>
+
+</div>
+
+<script>
+    document.getElementById("employeeForm").addEventListener("submit", function(event) {
+
+        // Prevent page refresh
+        event.preventDefault();
+
+        // Accept the form data
+        const employeeData = {
+            employeeId: document.getElementById("employeeId").value,
+            employeeName: document.getElementById("employeeName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            department: document.getElementById("department").value,
+            designation: document.getElementById("designation").value,
+            joiningDate: document.getElementById("joiningDate").value,
+            salary: document.getElementById("salary").value,
+            address: document.getElementById("address").value
+        };
+
+        /*
+            employeeData now contains the submitted information.
+
+            IMPORTANT:
+            The data is NOT displayed on the page.
+            You can send employeeData to your backend/API here.
+
+            Example:
+
+            fetch("your-api-url", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(employeeData)
+            });
+        */
+
+        console.log("Employee data received:", employeeData);
+
+        // Show only confirmation message
+        document.getElementById("successMessage").style.display = "block";
+
+        // Clear form
+        document.getElementById("employeeForm").reset();
+
+        // Hide message after 3 seconds
+        setTimeout(function() {
+            document.getElementById("successMessage").style.display = "none";
+        }, 3000);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Marks</title>
+<style>
+    body { font-family: Arial; }
+    input { margin: 5px; padding: 6px; }
+    table { border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid black; padding: 8px; }
+</style>
+</head>
+<body>
+
+<h2>Student Marks System</h2>
+
+<input id="name" placeholder="Student Name">
+<input id="m1" type="number" placeholder="Subject 1" min="0" max="100">
+<input id="m2" type="number" placeholder="Subject 2" min="0" max="100">
+<input id="m3" type="number" placeholder="Subject 3" min="0" max="100">
+
+<button onclick="addStudent()">Add Student</button>
+
+<table>
+<thead>
+<tr>
+    <th>Name</th><th>Total</th><th>Percentage</th><th>Status</th>
+</tr>
+</thead>
+<tbody id="records"></tbody>
+</table>
+
+<h3 id="topper"></h3>
+
+<script>
+    let students = [];
+
+    function addStudent() {
+        let name = document.getElementById("name").value;
+        let a = document.getElementById("m1").value;
+        let b = document.getElementById("m2").value;
+        let c = document.getElementById("m3").value;
+
+        if (!name.trim() || a === "" || b === "" || c === "") {
+            alert("Enter all details");
+            return;
+        }
+
+        a = Number(a);
+        b = Number(b);
+        c = Number(c);
+
+       /* if ([a, b, c].some(m => m < 0 || m > 100)) {
+            alert("Marks must be between 0 and 100");
+            return;
+        }*/
+
+        let total = a + b + c;
+        let percentage = total / 3;
+
+        students.push({name, total, percentage});
+        displayStudents();
+    }
+
+    function displayStudents() {
+        let records = document.getElementById("records");
+        records.innerHTML = "";
+
+        students.forEach(s => {
+            records.innerHTML += `<tr>
+                <td>${s.name}</td>
+                <td>${s.total}</td>
+                <td>${s.percentage.toFixed(2)}%</td>
+                <td>${s.percentage >= 40 ? "Pass" : "Fail"}</td>
+            </tr>`;
+        });
+
+        let best = students.reduce((a, b) =>
+            b.total > a.total ? b : a
+        );
+
+        document.getElementById("topper").innerText =
+            "Topper: " + best.name + " (" + best.total + "/300)";
+    }
+</script>
+
+</body>
+</html>

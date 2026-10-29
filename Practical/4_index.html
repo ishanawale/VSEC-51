@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Traffic Signal with Moving Box</title>
+  <style>
+    .signal {
+      width: 100px;
+      background-color: black;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .light {
+      width: 70px;
+      height: 70px;
+      background-color: gray;
+      border-radius: 50%;
+      margin: 10px auto;
+    }
+    .red {
+      animation: redLight 6s infinite;
+    }
+    .yellow {
+      animation: yellowLight 6s infinite;
+    }
+    .green {
+      animation: greenLight 6s infinite;
+    }
+    @keyframes redLight {
+      0%, 30% {
+        background-color: red;
+      }
+      31%, 100% {
+        background-color: gray;
+      }
+    }
+    @keyframes yellowLight {
+      0%, 30% {
+        background-color: gray;
+      }
+      31%, 50% {
+        background-color: yellow;
+      }
+      51%, 100% {
+        background-color: gray;
+      }
+    }
+    @keyframes greenLight {
+      0%, 50% {
+        background-color: gray;
+      }
+      51%, 100% {
+        background-color: green;
+      }
+    }
+
+    /* Moving Box */
+    .car {
+      width: 100px;
+      height: 50px;
+      background-color: blue;
+      margin-top: 30px;
+      animation: moveCar 6s infinite;
+    }
+    @keyframes moveCar {
+      0%, 50% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(500px);
+      }
+    }
+  </style>
+</head>
+<body>
+<h2>Traffic Signal Animation</h2>
+<div class="signal">
+  <div class="light red"></div>
+  <div class="light yellow"></div>
+  <div class="light green"></div>
+</div>
+<div class="car"></div>
+</body>

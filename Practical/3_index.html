@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paint App</title>
+</head>
+<body>
+
+<h2>Simple Paint Application</h2>
+
+Color:
+<input type="color" id="color" value="#ff0000">
+
+Brush Size:
+<input type="range" id="size" min="1" max="30" value="5">
+
+<button onclick="clearCanvas()">Clear</button>
+<br><br>
+
+<canvas id="canvas" width="600" height="350"
+        style="border:2px solid black"></canvas>
+
+<script>
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    canvas.onmousedown = function(e) {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    };
+
+    canvas.onmousemove = function(e) {
+        if (drawing) {
+            ctx.strokeStyle = document.getElementById("color").value;
+            ctx.lineWidth = document.getElementById("size").value;
+            ctx.lineCap = "round";
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        }
+    };
+
+    canvas.onmouseup = function() {
+        drawing = false;
+    };
+
+    canvas.onmouseleave = function() {
+        drawing = false;
+    };
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+</script>
+
+</body>
+</html>
